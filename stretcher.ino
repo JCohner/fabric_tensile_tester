@@ -1,8 +1,8 @@
 #include <fast_samd21_tc3.h>
 
-#include "stepper.h"
+#include "rail.h"
 
-Stepper step;
+Rail rail;
 
 void TC3_Handler(void) {
   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
@@ -12,7 +12,7 @@ void TC3_Handler(void) {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   fast_samd21_tc3_configure(100000); // starts the timer/trigger with 0.1 s
-  step.setup();
+  rail.setup();
 
   Serial.begin(9600);
 }
