@@ -10,6 +10,7 @@ public:
   }
   void setup();
   void move(double pos);
+  double get_position() {return rail_position_;}
   bool is_moving(){ return is_moving_;}
 private:
   PRODRIVER stepper;
