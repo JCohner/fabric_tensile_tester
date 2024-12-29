@@ -28,7 +28,8 @@ public:
 
   void enqueue_command(Command command) {command_queue_.push(command);}
   Update tick();
-
+  void setup();
+  
 private:
   // Peripherals
   Rail rail_;

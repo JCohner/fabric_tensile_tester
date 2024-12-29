@@ -1,6 +1,10 @@
 #include "robot.h"
 #include "Arduino.h"
 
+void Robot::setup(){
+  rail_.setup();
+}
+
 Robot::Update Robot::tick(){
   // Get new command if 
   if (current_command_status_ != Robot::Status::NONE){
