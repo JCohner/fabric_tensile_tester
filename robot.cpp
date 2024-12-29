@@ -1,3 +1,5 @@
+#include <string>
+
 #include "robot.h"
 #include "Arduino.h"
 
@@ -7,9 +9,11 @@ void Robot::setup(){
 
 Robot::Update Robot::tick(){
   // Get new command if 
-  if (current_command_status_ != Robot::Status::NONE){
+  if (current_command_status_ != Robot::Status::RUNNING){
     if (!command_queue_.empty()){
+      Serial.print("Grabbing new command: ");
       current_command_ = command_queue_.front();
+      Serial.println((int) current_command_);
       command_queue_.pop();
     } else {
       current_command_ = Robot::Command::NONE;
@@ -30,11 +34,14 @@ Robot::Update Robot::tick(){
       break;
   }
 
+  current_command_status_ = status;
   return Robot::Update(current_command_, status);
 }
 
 Robot::Status Robot::tick_home(){
+  Serial.println("Checking that home shit");
   if (rail_.is_home_switch_hit()){
+    Serial.println("Got it bitch");
     return Robot::Status::SUCCESS;
   }
   // lame, move back 0.1mm...

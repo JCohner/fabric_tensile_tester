@@ -31,8 +31,13 @@ void setup() {
 }
 
 void loop() {
+  delay(100);
   auto command = check_for_commands();
+  if ((int)command != 0) 
+    Serial.println((int) command);
   if (command != Robot::Command::NONE){
+    Serial.print("Got command: ");
+    Serial.println((int) command);
     robot.enqueue_command(command);
   }
 }

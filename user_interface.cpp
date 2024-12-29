@@ -20,7 +20,7 @@ Robot::Command check_for_commands(){
     auto incoming_string = Serial.readStringUntil('\r');
     Serial.print("Reading command: ");
     Serial.println(incoming_string);
-    auto command_enum = command_map[incoming_string.c_str()]; // invalid keys will be enum = 0 == NONE 
+    command_enum = command_map[incoming_string.c_str()]; // invalid keys will be enum = 0 == NONE 
   }
   return command_enum;
 }
