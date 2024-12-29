@@ -1,6 +1,6 @@
 #include <fast_samd21_tc3.h>
 #include "rail.h"
-#include "webserver.h"
+
 Rail rail;
 
 void TC3_Handler(void) {
@@ -31,7 +31,7 @@ void loop() {
     Serial.print("Sending rail to: ");
     auto pos = atoi(incoming_string.c_str());
     Serial.println(pos);
-    rail.move(pos);
+    rail.move_absolute(pos);
     Serial.println("Rail move done ");
   }
 }
