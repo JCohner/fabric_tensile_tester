@@ -67,6 +67,9 @@ void Robot::tick_preload(){
   // check is_homed()
   status_.set(Status::RUNNING);
   switch (preload_state_.get()){
+    case PreloadState::NOT_PRELOADING:
+      Serial.println("Waiting for preload value");
+      preload_state_.set(PreloadState::PRELOAD_GETTING_VALUE); // INCREMENT STATE
     case PreloadState::PRELOAD_GETTING_VALUE:
       // don't spam, just wait for value patiently
       if (target_position_.check_edge()){

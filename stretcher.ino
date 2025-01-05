@@ -25,7 +25,7 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
+  delay(10);
   if (Serial.available() > 0){
     auto incoming_string = Serial.readStringUntil('\r');
     Serial.print("Read string: ");
