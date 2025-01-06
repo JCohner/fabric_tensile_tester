@@ -67,6 +67,8 @@ void Robot::tick_preload(){
   // check is_homed()
   status_.set(Status::RUNNING);
   switch (preload_state_.get()){
+    case PreloadState::PRELOADED:
+      Serial.println("Already preloaded but new value requested");
     case PreloadState::NOT_PRELOADING:
       Serial.println("Waiting for preload value");
       preload_state_.set(PreloadState::PRELOAD_GETTING_VALUE); // INCREMENT STATE
@@ -82,9 +84,6 @@ void Robot::tick_preload(){
       rail_.move_absolute(target_position_.get());
       Serial.println("Moved to position!");
       preload_state_.set(PreloadState::PRELOADED);
-      status_.set(Status::SUCCESS);
-      break;
-    case PreloadState::PRELOADED:
       status_.set(Status::SUCCESS);
       break;
   }
