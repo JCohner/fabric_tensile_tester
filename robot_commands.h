@@ -25,11 +25,4 @@ static std::map<std::string, Command> command_map = {
   {"test", Command::TEST}
 };
 
-enum struct Status {
-  NONE = 0,
-  RUNNING = 1,
-  SUCCESS = 2,
-  FAILURE = 3
-};
-
 #endif /* __ROBOT_COMMANDS_H__ */

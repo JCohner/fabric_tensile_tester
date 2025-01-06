@@ -10,13 +10,14 @@
 
 #include "rail.h"
 
+#include "status.h"
 #include "robot_enums.h"
 #include "robot_commands.h"
 
 class Robot {
 public:
   void enqueue_message(arduino::String incoming_string);
-
+  void tick_rail();
   void tick();
   void setup();
   Robot() 

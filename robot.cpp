@@ -7,6 +7,10 @@ void Robot::setup(){
   rail_.setup();
 }
 
+void Robot::tick_rail(){
+  rail_.tick();
+}
+
 void Robot::tick(){
   // Update command_ if we are ready
   if (status_.get() != Status::RUNNING){
@@ -58,7 +62,7 @@ void Robot::tick_home(){
   }
 
   // lame, move back 0.1mm...
-  rail_.move_relative(0.1);
+  rail_.move_relative(0.01);
 
   // could put timeout here
 }

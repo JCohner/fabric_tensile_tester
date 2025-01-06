@@ -7,7 +7,7 @@ Robot robot;
 void TC3_Handler(void) {
   //digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   //Serial.println(analogRead(A7));
-  
+  robot.tick_rail();
   TC3->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
@@ -19,7 +19,7 @@ void setup() {
   robot.setup();
 
   pinMode(LED_BUILTIN, OUTPUT);
-  //fast_samd21_tc3_configure(10000); // starts the timer/trigger with 0.1 s
+  fast_samd21_tc3_configure(2000); // starts the timer/trigger with 0.1 s
   //fast_samd21_tc4_configure(100000); // starts the timer/trigger with 0.1 s
   Serial.begin(9600);
 }
