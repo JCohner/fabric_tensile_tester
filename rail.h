@@ -56,7 +56,7 @@ private:
   const double base_step_per_rev = 200.0;
   //double get_step_per_mm();
   const double step_per_mm = stepper.settings.stepResolution * (1.0 / rail_pitch_) * base_step_per_rev;
-
+  const double mm_per_step = 1.0 / step_per_mm;
   std::queue<Goal> job_queue_;
   Goal current_goal_;
 };

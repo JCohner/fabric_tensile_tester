@@ -42,7 +42,7 @@ void Rail::tick(){
 
 
   // set running because we have a current goal
-  current_goal_.status = Status::RUNNING;
+  current_goal_.status.set(Status::RUNNING);
   is_moving_ = true; // relic determine how and if we keep
   // if this is first pass
   if (current_goal_.status.check_edge(Status::NONE)){
@@ -66,20 +66,21 @@ void Rail::tick(){
   bool err = false;
   if (current_goal_.steps_moved++ <= current_goal_.steps_to_move){
     err = non_blocking_step(current_goal_.direction);
-    // if (current_goal_.direction){
-    //   rail_position_ +=  1.0 / step_per_mm;
-    // } else {
-    //   rail_position_ -= 1.0 / step_per_mm;
-    // }
+    if (current_goal_.direction){
+      rail_position_ -=  mm_per_step;
+    } else {
+      rail_position_ += mm_per_step;
+    }
   } else {
-    current_goal_.status = Status::SUCCESS;
+    current_goal_.status.set(Status::SUCCESS);
     is_moving_ = false;
-    rail_position_ = current_goal_.position;
+    // rail_position_ = current_goal_.position;
     stepper.disable();
   }
-
+  Serial.print("Current rail pos: ");
+  Serial.println(rail_position_);
   if (!err){
-    current_goal_.status = Status::FAILURE;
+    current_goal_.status.set(Status::FAILURE);
     is_moving_ = false;
     stepper.disable();
   }
