@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <cmath>
 
 #include <Arduino.h>
@@ -65,7 +66,8 @@ void Rail::tick(){
   // Serial.print("Out of: ");
   // Serial.println(current_goal_.steps_to_move);
   bool err = false;
-  if (++current_goal_.steps_moved <= current_goal_.steps_to_move){
+  if (current_goal_.steps_moved < current_goal_.steps_to_move){
+    current_goal_.steps_moved++;
     err = non_blocking_step(current_goal_.direction);
     if (current_goal_.direction){
       rail_position_ -=  mm_per_step;
@@ -74,12 +76,12 @@ void Rail::tick(){
     }
   } else {
     current_goal_.status.set(Status::SUCCESS);
-    Serial.println("Success!");
     is_moving_ = false;
     stepper.disable();
   }
-  Serial.print("Current rail pos: ");
-  Serial.println(rail_position_);
+  // char buff[50] = {0};
+  // sprintf(buff, "Current rail pos: %.2f\r", rail_position_);
+  // Serial.print(buff);
   if (!err && is_moving_){
     Serial.println("ERROR!!");
     current_goal_.status.set(Status::FAILURE);
@@ -118,28 +120,10 @@ bool Rail::non_blocking_step(bool direction){
 }
 
 void Rail::move_absolute(double pos){
-  // double dist_mm = pos - rail_position_;
-  // Serial.print("Moving rail: ");
-  // Serial.println(dist_mm);
-  // int dist_steps = std::floor(dist_mm * get_step_per_mm());
-  // Serial.print("Commanding this many steps: ");
-  // Serial.println(dist_steps);
-  // is_moving_ = true;
-  // auto ret = stepper.step(abs(dist_steps) , std::signbit(dist_steps));
-  // Serial.print("Moved completed successfully?: ");
-  // Serial.println(ret);
-  // is_moving_ = false;
-  // rail_position_ = pos;
   job_queue_.push(Goal(pos));
 }
 
 void Rail::move_relative(double pos){
-  /*
-  Serial.print("Moving rail relative: ");
-  Serial.print(pos);
-  Serial.print("mm from: ");
-  Serial.println(rail_position_);
-  */
   move_absolute(rail_position_ + pos);
 }
 

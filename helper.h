@@ -1,6 +1,16 @@
 #ifndef __HELPER_H__
 #define __HELPER_H__
 
+/*
+  Slightly poorly named but I have found the below
+  class useful for member variables, especially when 
+  I want to catch an edge of such variable. This explicit
+  get and set is nice. 
+
+  Weird TODO: I have found you can directly assign a V_TYPE value to the class itself
+  this probably has to do with default assignment operator.... 
+*/
+
 template <typename V_TYPE>
 struct stateful_member {
 private:
@@ -31,5 +41,12 @@ public:
     return ret_val;
   }
 };
+
+#include <cmath>
+
+// float comparison helper
+static bool floatCompare(double f1, double f2, double thresh = 0) {
+  return std::fabs(f1 - f2) <= (1.0e-5 * std::fmax(std::fabs(f1), std::fabs(f2)) + thresh); 
+}
 
 #endif /* __HELPER_H__ */

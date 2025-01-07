@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <string>
+#include <functional>
 
 #include <Arduino.h>
 
@@ -40,6 +41,10 @@ private:
   stateful_member<TestState> test_state_;
   stateful_member<Command> command_; // the robot executes commands, in doing so it will permutate robot state variables
   stateful_member<Status> status_;
+
+  // load cell things
+  int load_cell_pin = A7;
+  std::function<int(void)> read_load_cell = [this](){return analogRead(this->load_cell_pin);};
 
   // Command Centric Guys
   void enqueue_command(Command command) {command_queue_.push(command);}

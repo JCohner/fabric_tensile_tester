@@ -82,13 +82,19 @@ void Robot::tick_preload(){
         Serial.print("Got preload pos value: ");
         Serial.println(target_position_.get());
         preload_state_.set(PreloadState::PRE_LOAD_MOVING_TO_VALUE); // INCREMENT STATE
+        rail_.move_absolute(target_position_.get());
       }
     break;
     case PreloadState::PRE_LOAD_MOVING_TO_VALUE:
-      rail_.move_absolute(target_position_.get());
-      Serial.println("Moved to position!");
-      preload_state_.set(PreloadState::PRELOADED);
-      status_.set(Status::SUCCESS);
+      char buff[100] = {0};
+      sprintf(buff, "Load Cell: %3d\t Current pos: %.2f vs Goal Pos %.2f\r", read_load_cell(),rail_.get_position(),target_position_.get());
+      Serial.print(buff);
+      if (floatCompare(rail_.get_position(), target_position_.get())){
+        Serial.print("\n");
+        Serial.println("Preload move done");
+        preload_state_.set(PreloadState::PRELOADED);
+        status_.set(Status::SUCCESS);
+      }
       break;
   }
 
@@ -99,6 +105,8 @@ void Robot::enqueue_message(arduino::String incoming_string){
       Serial.println("Resetting robot state");
       status_.set(Status::NONE);
       // probably clear queue and such
+      home_state_.set(HomeState::NOT_HOMED);
+      preload_state_.set(PreloadState::NOT_PRELOADING);
     }
 
     // if we are currently fielding PRELOADING command
