@@ -21,7 +21,7 @@ I am using the arduino-cli / arduino eco-system to build an deploy; sorry for be
   * holds Robot object
   * holds definition of timer interrupts used to handle
     * rail position handling - TC3
-    * load cell reading (WIP) - TC4
+    * load cell reading - TC4
   * performs serial reads to enqueue commands to Robot object
 
 * robot.*

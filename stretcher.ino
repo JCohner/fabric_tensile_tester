@@ -1,4 +1,5 @@
 #include <fast_samd21_tc3.h>
+#include <fast_samd21_tc4.h>
 
 #include "robot.h"
 
@@ -11,6 +12,11 @@ void TC3_Handler(void) {
   TC3->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
+void TC4_Handler(void) {
+  robot.tick_load_cell();
+  TC4->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
+}
+
 void setup() {
   while (!Serial){
     ;
@@ -19,8 +25,8 @@ void setup() {
   robot.setup();
 
   pinMode(LED_BUILTIN, OUTPUT);
-  fast_samd21_tc3_configure(2000); // starts the timer/trigger with 0.1 s
-  //fast_samd21_tc4_configure(100000); // starts the timer/trigger with 0.1 s
+  fast_samd21_tc3_configure(2000); // starts the timer/trigger with 2ms
+  fast_samd21_tc4_configure(2000); // starts the timer/trigger with 2ms
   Serial.begin(9600);
 }
 

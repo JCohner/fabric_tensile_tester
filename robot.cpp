@@ -7,10 +7,6 @@ void Robot::setup(){
   rail_.setup();
 }
 
-void Robot::tick_rail(){
-  rail_.tick();
-}
-
 void Robot::tick(){
   // Update command_ if we are ready
   if (status_.get() != Status::RUNNING){
@@ -87,7 +83,7 @@ void Robot::tick_preload(){
     break;
     case PreloadState::PRE_LOAD_MOVING_TO_VALUE:
       char buff[100] = {0};
-      sprintf(buff, "Load Cell: %3d\t Current pos: %.2f vs Goal Pos %.2f\r", read_load_cell(),rail_.get_position(),target_position_.get());
+      sprintf(buff, "Load Cell: %06.1f\t Current pos: %.2f vs Goal Pos %.2f\r", load_cell_.get_value(),rail_.get_position(),target_position_.get());
       Serial.print(buff);
       if (rail_.job_complete()){
         Serial.print("\n");

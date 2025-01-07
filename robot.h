@@ -3,13 +3,13 @@
 
 #include <queue>
 #include <string>
-#include <functional>
 
 #include <Arduino.h>
 
 #include "helper.h"
 
 #include "rail.h"
+#include "load_cell.h"
 
 #include "status.h"
 #include "robot_enums.h"
@@ -18,7 +18,8 @@
 class Robot {
 public:
   void enqueue_message(arduino::String incoming_string);
-  void tick_rail();
+  void tick_rail() {rail_.tick();};
+  void tick_load_cell() {load_cell_.tick();};
   void tick();
   void setup();
   Robot() 
@@ -43,8 +44,7 @@ private:
   stateful_member<Status> status_;
 
   // load cell things
-  int load_cell_pin = A7;
-  std::function<int(void)> read_load_cell = [this](){return analogRead(this->load_cell_pin);};
+  LoadCell load_cell_;
 
   // Command Centric Guys
   void enqueue_command(Command command) {command_queue_.push(command);}
