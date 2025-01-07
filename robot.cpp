@@ -62,7 +62,7 @@ void Robot::tick_home(){
   }
 
   // lame, move back 0.1mm...
-  rail_.move_relative(0.01);
+  rail_.move_relative(0.1);
 
   // could put timeout here
 }

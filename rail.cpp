@@ -57,14 +57,15 @@ void Rail::tick(){
   
     // enable stepper
     stepper.enable();
+    delayMicroseconds(100); // needed delay for stepper to enable before getting commands
   }
 
-  Serial.print("At this many steps: ");
-  Serial.println(current_goal_.steps_moved);
-  Serial.print("Out of: ");
-  Serial.println(current_goal_.steps_to_move);
+  // Serial.print("At this many steps: ");
+  // Serial.println(current_goal_.steps_moved);
+  // Serial.print("Out of: ");
+  // Serial.println(current_goal_.steps_to_move);
   bool err = false;
-  if (current_goal_.steps_moved++ <= current_goal_.steps_to_move){
+  if (++current_goal_.steps_moved <= current_goal_.steps_to_move){
     err = non_blocking_step(current_goal_.direction);
     if (current_goal_.direction){
       rail_position_ -=  mm_per_step;
@@ -73,13 +74,14 @@ void Rail::tick(){
     }
   } else {
     current_goal_.status.set(Status::SUCCESS);
+    Serial.println("Success!");
     is_moving_ = false;
-    // rail_position_ = current_goal_.position;
     stepper.disable();
   }
   Serial.print("Current rail pos: ");
   Serial.println(rail_position_);
-  if (!err){
+  if (!err && is_moving_){
+    Serial.println("ERROR!!");
     current_goal_.status.set(Status::FAILURE);
     is_moving_ = false;
     stepper.disable();
