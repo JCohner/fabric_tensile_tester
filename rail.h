@@ -37,6 +37,9 @@ public:
   bool is_home_switch_hit();
   void move_absolute(double pos);
   void move_relative(double pos);
+
+  bool job_complete() {return current_goal_.status.get() == Status::SUCCESS;}
+
 private:
   // stepper driver 
   PRODRIVER stepper;
