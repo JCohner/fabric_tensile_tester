@@ -5,6 +5,7 @@
 
 void Robot::setup(){
   rail_.setup();
+  load_cell_.setup();
 }
 
 void Robot::tick(){

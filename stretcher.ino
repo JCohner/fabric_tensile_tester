@@ -26,7 +26,7 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
   fast_samd21_tc3_configure(2000); // starts the timer/trigger with 2ms
-  fast_samd21_tc4_configure(2000); // starts the timer/trigger with 2ms
+  fast_samd21_tc4_configure(20); // starts the timer/trigger with 20us
   Serial.begin(9600);
 }
 
