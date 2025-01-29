@@ -6,8 +6,6 @@
 Robot robot;
 
 void TC3_Handler(void) {
-  //digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-  //Serial.println(analogRead(A7));
   robot.tick_rail();
   TC3->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
