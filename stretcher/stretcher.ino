@@ -36,7 +36,8 @@ void setup() {
 }
 
 void loop() {
-  delay(10);
+  delay(50);
+  // if command available write
   if (Serial.available() > 0){
     auto incoming_string = Serial.readStringUntil('\r');
     Serial.print("Read string: ");
@@ -44,5 +45,7 @@ void loop() {
 
     robot.enqueue_message(incoming_string);
   }
+  // publish state update
+  //Serial.println(robot.post_update());
 }
 

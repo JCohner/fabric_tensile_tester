@@ -14,9 +14,14 @@ class StretchEmUI(QMainWindow):
       # connect serial up
       self.serial = SerialInterface()
 
-      # Wire up buttons
+      ''' 
+      Wire up buttons
+      '''
+      # Serial buttons
       self.ui.connectSerialButton.clicked.connect(self.attempt_serial_connect)
       self.ui.disconnectSerialButton.clicked.connect(self.attempt_serial_disconnect)
+      # Control buttons
+      self.ui.homeButton.clicked.connect(self.attempt_home)
 
    def attempt_serial_connect(self):
       if (self.ui.serialPortLineEdit.isModified()):
@@ -35,6 +40,10 @@ class StretchEmUI(QMainWindow):
       print(f"Disconnecting from {self.serial.ser.port}")
       self.serial.close()
       self.ui.isSerialConnectedIndicator.setStyleSheet("background-color: red")
+
+   def attempt_home(self):
+      if (not self.serial.is_connected):
+         print("Not connected to serial, not sending command")
 
 
 
