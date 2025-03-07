@@ -22,6 +22,8 @@ void TC5_Handler(void) {
 }
 
 void setup() {
+  Serial.begin(9600);
+  Serial1.begin(9600);
   while (!Serial){
     ;
   }
@@ -32,7 +34,6 @@ void setup() {
   fast_samd21_tc3_configure(2000); // starts the timer/trigger with 2ms
   fast_samd21_tc4_configure(20); // starts the timer/trigger with 20us // TODO deactivate this if we arent reading LC
   fast_samd21_tc5_configure(10000); // starts the timer/trigger with 10ms
-  Serial.begin(9600);
 }
 
 void loop() {
@@ -48,6 +49,6 @@ void loop() {
   //get and publish state update
   char mess[250] = {0};
   robot.post_update(mess);
-  Serial.println(mess);
+  Serial1.println(mess);
 }
 
