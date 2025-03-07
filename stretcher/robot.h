@@ -23,6 +23,9 @@ public:
   void tick_load_cell() {load_cell_.tick();};
   void tick();
   void setup();
+  void post_update(char* mess) {
+    state_.serialize(mess);
+  }
   Robot() {}
 
 private:

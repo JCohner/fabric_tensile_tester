@@ -67,6 +67,7 @@ void Robot::tick_home(){
 void Robot::tick_preload(){
   // check is_homed()
   state_.status_.set(Status::RUNNING);
+  state_.current_position_.set(rail_.get_position());
   switch (state_.preload_state_.get()){
     case PreloadState::PRELOADED:
       Serial.println("Already preloaded but new value requested");

@@ -27,6 +27,7 @@ public:
     val = new_val;
   }
   V_TYPE get() {return val;}
+  int get_int() {return int(val);}
 
   bool check_edge() {
     auto ret_val = val != prev_val;
