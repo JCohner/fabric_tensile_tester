@@ -9,6 +9,10 @@ void Robot::setup(){
 }
 
 void Robot::tick(){
+  // values to update every tick
+  state_.current_position_.set(rail_.get_position());
+  state_.current_load_.set(load_cell_.get_value());
+
   // Update command_ if we are ready
   if (state_.status_.get() != Status::RUNNING){
     if (!command_queue_.empty()){
@@ -67,7 +71,6 @@ void Robot::tick_home(){
 void Robot::tick_preload(){
   // check is_homed()
   state_.status_.set(Status::RUNNING);
-  state_.current_position_.set(rail_.get_position());
   switch (state_.preload_state_.get()){
     case PreloadState::PRELOADED:
       Serial.println("Already preloaded but new value requested");

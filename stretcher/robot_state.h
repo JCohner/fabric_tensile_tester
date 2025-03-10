@@ -14,6 +14,7 @@ struct RobotState {
   }
   stateful_member<double> target_position_ {0};
   stateful_member<double> current_position_ {0};
+  stateful_member<double> current_load_ {0};
   stateful_member<HomeState> home_state_;
   stateful_member<PreloadState> preload_state_;
   stateful_member<TestState> test_state_;
@@ -22,8 +23,8 @@ struct RobotState {
 
 
   void serialize(char* buff){
-    sprintf(buff, "home_state: %d, preload_state: %d, test_state_: %d, command: %d, status: %d, current_target:  %.2f, current_positon: %.2f",
-            home_state_.get_int(), preload_state_.get_int(), test_state_.get_int(), command_.get_int(), status_.get_int(), target_position_.get(), current_position_.get());
+    sprintf(buff, "hs: %d, ps: %d, ts: %d, c: %d, s: %d, ct:  %5.2f, cp: %5.2f, cl:%5.2f\r",
+            home_state_.get_int(), preload_state_.get_int(), test_state_.get_int(), command_.get_int(), status_.get_int(), target_position_.get(), current_position_.get(), current_load_.get());
   }
 
 

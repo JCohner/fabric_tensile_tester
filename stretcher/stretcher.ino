@@ -37,7 +37,7 @@ void setup() {
 }
 
 void loop() {
-  delay(250);
+  delay(100);
   // if command available write
   if (Serial.available() > 0){
     auto incoming_string = Serial.readStringUntil('\r');
@@ -49,6 +49,6 @@ void loop() {
   //get and publish state update
   char mess[250] = {0};
   robot.post_update(mess);
-  Serial1.println(mess);
+  Serial1.print(mess);
 }
 
