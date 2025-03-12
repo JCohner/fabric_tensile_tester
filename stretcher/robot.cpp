@@ -16,9 +16,9 @@ void Robot::tick(){
   // Update command_ if we are ready
   if (state_.status_.get() != Status::RUNNING){
     if (!command_queue_.empty()){
-      Serial.print("Grabbing new command: ");
+      Serial1.print("Grabbing new command: ");
       state_.command_.set(command_queue_.front());
-      Serial.println((int) state_.command_.get()); // can probably use command map here
+      Serial1.println((int) state_.command_.get()); // can probably use command map here
       command_queue_.pop();
     } else {
       state_.command_.set(Command::NONE);
@@ -44,11 +44,11 @@ void Robot::tick_home(){
   // first check if we are already homed
   switch (state_.home_state_.get()){
     case HomeState::NOT_HOMED:
-      Serial.println("We aren't homed! Commence homing");
+      Serial1.println("We aren't homed! Commence homing");
       state_.home_state_.set(HomeState::HOMING);
       break;
     case HomeState::HOMED:
-      Serial.println("Already homed!!");
+      Serial1.println("Already homed!!");
       state_.status_.set(Status::SUCCESS);
       return; // no work left, EARLY RETURN
       break;
@@ -56,7 +56,7 @@ void Robot::tick_home(){
 
   state_.status_.set(Status::RUNNING);
   if (rail_.is_home_switch_hit()){
-    Serial.println("Got home!");
+    Serial1.println("Got home!");
     state_.home_state_.set(HomeState::HOMED);
     state_.status_.set(Status::SUCCESS);
     return;
@@ -73,15 +73,15 @@ void Robot::tick_preload(){
   state_.status_.set(Status::RUNNING);
   switch (state_.preload_state_.get()){
     case PreloadState::PRELOADED:
-      Serial.println("Already preloaded but new value requested");
+      Serial1.println("Already preloaded but new value requested");
     case PreloadState::NOT_PRELOADING:
-      Serial.println("Waiting for preload value");
+      Serial1.println("Waiting for preload value");
       state_.preload_state_.set(PreloadState::PRELOAD_GETTING_VALUE); // INCREMENT STATE
     case PreloadState::PRELOAD_GETTING_VALUE:
       // don't spam, just wait for value patiently
       if (state_.target_position_.check_edge()){
-        Serial.print("Got preload pos value: ");
-        Serial.println(state_.target_position_.get());
+        Serial1.print("Got preload pos value: ");
+        Serial1.println(state_.target_position_.get());
         state_.preload_state_.set(PreloadState::PRE_LOAD_MOVING_TO_VALUE); // INCREMENT STATE
         rail_.move_absolute(state_.target_position_.get());
       }
@@ -89,10 +89,10 @@ void Robot::tick_preload(){
     case PreloadState::PRE_LOAD_MOVING_TO_VALUE:
       char buff[100] = {0};
       sprintf(buff, "Load Cell: %06.1f\t Current pos: %.2f vs Goal Pos %.2f\r", load_cell_.get_value(),rail_.get_position(),state_.target_position_.get());
-      Serial.print(buff);
+      Serial1.print(buff);
       if (rail_.job_complete()){
-        Serial.print("\n");
-        Serial.println("Preload move done");
+        Serial1.print("\n");
+        Serial1.println("Preload move done");
         state_.preload_state_.set(PreloadState::PRELOADED);
         state_.status_.set(Status::SUCCESS);
       }
@@ -103,7 +103,7 @@ void Robot::tick_preload(){
 
 void Robot::enqueue_message(arduino::String incoming_string){
     if (incoming_string == "q"){
-      Serial.println("Resetting robot state");
+      Serial1.println("Resetting robot state");
       state_.status_.set(Status::NONE);
       // probably clear queue and such
       state_.home_state_.set(HomeState::NOT_HOMED);
@@ -113,8 +113,8 @@ void Robot::enqueue_message(arduino::String incoming_string){
     // if we are currently fielding PRELOADING command
   if (state_.command_.get() == Command::PRELOAD && state_.preload_state_.get() == PreloadState::PRELOAD_GETTING_VALUE){
     auto val_to_go_to = atoi(incoming_string.c_str()); // uninterp strings return 0, this is actuall bad for us
-    Serial.print("Command new preload target:  ");
-    Serial.println(val_to_go_to);
+    Serial1.print("Command new preload target:  ");
+    Serial1.println(val_to_go_to);
     state_.target_position_.set(val_to_go_to);
   }
   else { // otherwise just interpret whatever incoming string to just be a command

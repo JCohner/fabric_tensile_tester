@@ -23,7 +23,7 @@ void TC5_Handler(void) {
 
 void setup() {
   Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial1.begin(9600); // debug out
   while (!Serial){
     ;
   }
@@ -41,14 +41,15 @@ void loop() {
   // if command available write
   if (Serial.available() > 0){
     auto incoming_string = Serial.readStringUntil('\r');
-    Serial.print("Read string: ");
-    Serial.println(incoming_string);
+    Serial1.print("Read string: ");
+    Serial1.println(incoming_string);
 
     robot.enqueue_message(incoming_string);
   }
+
   //get and publish state update
   char mess[250] = {0};
   robot.post_update(mess);
-  Serial1.print(mess);
+  Serial.print(mess);
 }
 
