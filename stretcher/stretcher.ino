@@ -17,12 +17,13 @@ void TC4_Handler(void) {
 }
 
 void TC5_Handler(void) {
-    robot.tick();
+  robot.tick();
   TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
 void setup() {
   Serial.begin(9600);
+  Serial.setTimeout(50);
   Serial1.begin(9600); // debug out
   while (!Serial){
     ;
@@ -41,7 +42,7 @@ int ii = 0;
 char termination_char = '\r';
 
 void loop() {
-  delay(100);
+  delay(10);
   // if command available write
   if (Serial.available() > 0){
     auto incoming_byte = Serial.read();
