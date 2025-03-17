@@ -1,6 +1,7 @@
 #ifndef __ROBOT_STATE_H__
 #define __ROBOT_STATE_H__
 
+#include <avr/dtostrf.h>
 #include <sstream>
 
 struct RobotState {
@@ -23,14 +24,20 @@ struct RobotState {
 
 
   void serialize(char* buff){
-    sprintf(buff, "hs: %d, ps: %d, ts: %d, c: %d, s: %d, ct:  %5.2f, cp: %5.2f, cl:%5.2f\r",
+    char current_position_float_string[10] = {0};
+    char current_target_float_string[10] = {0};
+    char current_load_float_string[10] = {0};
+    dtostrf(current_position_.get(), 4, 2, current_position_float_string);
+    dtostrf(target_position_.get(), 4, 2, current_target_float_string);
+    dtostrf(current_load_.get(), 4, 2, current_load_float_string);
+    sprintf(buff, "hs: %d, ps: %d, ts: %d, c: %d, s: %d, ct:  %s, cp: %s, cl:%s\r",
             home_state_.get_int(), 
             preload_state_.get_int(), 
             test_state_.get_int(), 
             command_.get_int(), status_.get_int(), 
-            target_position_.get(), 
-            current_position_.get(), 
-            current_load_.get());
+            current_target_float_string, 
+            current_position_float_string, 
+            current_load_float_string);
   }
 };
 

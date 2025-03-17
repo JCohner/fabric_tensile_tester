@@ -101,7 +101,10 @@ void Robot::tick_preload(){
 
 }
 
-void Robot::enqueue_message(arduino::String incoming_string){
+void Robot::enqueue_message(char* buff, int len){
+    std::string incoming_string = std::string(buff);
+    incoming_string.pop_back();
+    
     if (incoming_string == "q"){
       Serial1.println("Resetting robot state");
       state_.status_.set(Status::NONE);

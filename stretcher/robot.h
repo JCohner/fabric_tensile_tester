@@ -18,7 +18,7 @@
 
 class Robot {
 public:
-  void enqueue_message(arduino::String incoming_string);
+  void enqueue_message(char* buff, int len);
   void tick_rail() {rail_.tick();};
   void tick_load_cell() {load_cell_.tick();};
   void tick();

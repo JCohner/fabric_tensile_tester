@@ -36,7 +36,7 @@ void setup() {
   fast_samd21_tc5_configure(10000); // starts the timer/trigger with 10ms
 }
 
-char yuh[100] = {0};
+char buff[100] = {0};
 int ii = 0;
 char termination_char = '\r';
 
@@ -45,15 +45,15 @@ void loop() {
   // if command available write
   if (Serial.available() > 0){
     auto incoming_byte = Serial.read();
-    yuh[ii++] = incoming_byte;
+    buff[ii++] = incoming_byte;
     Serial1.print("Read byte: ");
     Serial1.println(incoming_byte);
 
     if (incoming_byte == termination_char){
       Serial1.print("Read string: ");
-      Serial.println(yuh);
-      robot.enqueue_message(yuh);
-      memset(yuh, 0, 100*sizeof(char));
+      Serial.println(buff);
+      robot.enqueue_message(buff, ii);
+      memset(buff, 0, 100*sizeof(char));
       ii =0;
     }
 
