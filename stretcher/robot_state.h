@@ -24,10 +24,14 @@ struct RobotState {
 
   void serialize(char* buff){
     sprintf(buff, "hs: %d, ps: %d, ts: %d, c: %d, s: %d, ct:  %5.2f, cp: %5.2f, cl:%5.2f\r",
-            home_state_.get_int(), preload_state_.get_int(), test_state_.get_int(), command_.get_int(), status_.get_int(), target_position_.get(), current_position_.get(), current_load_.get());
+            home_state_.get_int(), 
+            preload_state_.get_int(), 
+            test_state_.get_int(), 
+            command_.get_int(), status_.get_int(), 
+            target_position_.get(), 
+            current_position_.get(), 
+            current_load_.get());
   }
-
-
 };
 
 #endif /* __ROBOT_STATE_H__ */
