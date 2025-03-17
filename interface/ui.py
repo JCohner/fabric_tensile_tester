@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from qt_app_schema import Ui_MainWindow
 
+from threading import Thread
+
 from serial_interface import SerialInterface
 
 class StretchEmUI(QMainWindow):
@@ -13,6 +15,7 @@ class StretchEmUI(QMainWindow):
 
       # connect serial up
       self.serial = SerialInterface()
+      self.serial.start_work()
 
       ''' 
       Wire up buttons
@@ -42,7 +45,7 @@ class StretchEmUI(QMainWindow):
       self.ui.isSerialConnectedIndicator.setStyleSheet("background-color: red")
 
    def attempt_home(self):
-      if (not self.serial.is_connected):
+      if (not self.serial.is_connected.value):
          print("Not connected to serial, not sending command")
 
 
