@@ -38,5 +38,5 @@ class SerialInterface(Worker):
         if val == b'\r':
           mess = ''.join(char_buff)
           char_buff = []
-          print(f"message read as {mess}")
+          # print(f"message read as {mess}")
           self.message_queue.put(mess)

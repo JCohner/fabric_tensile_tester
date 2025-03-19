@@ -4,6 +4,7 @@ from qt_app_schema import Ui_MainWindow
 from threading import Thread
 
 from serial_interface import SerialInterface
+from state_interactor import StateInteractor
 
 class StretchEmUI(QMainWindow):
    def __init__(self):
@@ -16,6 +17,9 @@ class StretchEmUI(QMainWindow):
       # connect serial up
       self.serial = SerialInterface()
       self.serial.start_work()
+
+      self.state_interactor = StateInteractor(self.serial.message_queue)
+      self.state_interactor.start_work() 
 
       ''' 
       Wire up buttons
