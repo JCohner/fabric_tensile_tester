@@ -52,6 +52,7 @@ class StretchEmUI(QMainWindow):
 
    def __del__(self):
       print("closing shit")
+      self.serial.stop_work()
       self.serial.close()
 
 def main():
@@ -60,6 +61,7 @@ def main():
    MainWindow = StretchEmUI()
 
    MainWindow.show()
+   print("GOT HERE")
    sys.exit(app.exec())
 
 

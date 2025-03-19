@@ -1,20 +1,19 @@
 import serial
-from multiprocessing import Value
-from threading import Thread
 from queue import Queue
-from ctypes import c_bool
 import time
+from multiprocessing import Value
+from ctypes import c_bool
 
+from worker import Worker
 
-class SerialInterface():
+class SerialInterface(Worker):
   def __init__(self):
+    super().__init__()
     self.default_port = "/dev/ttyACM0"
     self.ser = serial.Serial()
     self.is_connected = Value(c_bool, False)
 
-    self.is_working = Value(c_bool, False)
     self.message_queue = Queue()
-    self.work_thread = Thread(target=self.serial_interface_workthread)
 
 
   def open(self, port: str):
@@ -28,7 +27,7 @@ class SerialInterface():
     self.is_connected.value = False
 
 
-  def serial_interface_workthread(self):
+  def work_thread(self):
     char_buff = []
     while(self.is_working.value):
       time.sleep(0.5)
@@ -41,13 +40,3 @@ class SerialInterface():
           char_buff = []
           print(f"message read as {mess}")
           self.message_queue.put(mess)
-
-  def start_work(self):
-    if (not self.is_working.value):
-      self.is_working.value = True
-      self.work_thread.start()
-
-  def stop_work(self):
-    if (self.is_working.value):
-      self.is_working.value = False
-      self.work_thread.join()
