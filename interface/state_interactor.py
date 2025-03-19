@@ -57,7 +57,7 @@ class StateInteractor(Worker):
 
   def work_thread(self):
     while(self.is_working.value):
-      time.sleep(0.1)
+      time.sleep(0.01) # prevent fighting on the queue
       if (not self.message_queue.empty()):
         message = self.message_queue.get()
         dm = {sub[0] : float(sub[1]) for sub in (el.split(":") for el in message.split(","))} # cursed
@@ -69,5 +69,5 @@ class StateInteractor(Worker):
                              current_target=dm['ct'],
                              current_position=dm['cp'],
                              current_load=dm['cl'])
-        print(state_update)
         self.state_update_queue.put(state_update)
+        print(self.state_update_queue.qsize())

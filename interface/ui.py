@@ -3,12 +3,13 @@ from qt_app_schema import Ui_MainWindow
 
 from threading import Thread
 
+from worker import Worker
 from serial_interface import SerialInterface
 from state_interactor import StateInteractor
 
-class StretchEmUI(QMainWindow):
+class StretchEmUI(QMainWindow, Worker):
    def __init__(self):
-      super().__init__()
+      super(StretchEmUI, self).__init__()
 
       # Set up the user interface from Designer.
       self.ui = Ui_MainWindow()
@@ -18,8 +19,11 @@ class StretchEmUI(QMainWindow):
       self.serial = SerialInterface()
       self.serial.start_work()
 
+      # start state interactor
       self.state_interactor = StateInteractor(self.serial.message_queue)
       self.state_interactor.start_work() 
+
+      self.start_work()
 
       ''' 
       Wire up buttons
@@ -52,12 +56,20 @@ class StretchEmUI(QMainWindow):
       if (not self.serial.is_connected.value):
          print("Not connected to serial, not sending command")
 
+   def work_thread(self):
+      while(self.is_working.value):
+         if (not self.state_interactor.state_update_queue.empty()):
+            val = self.state_interactor.state_update_queue.get()
+            print(val)
 
+            # we have val!! we can now interact with it graphically inshallah
 
    def __del__(self):
       print("closing shit")
       self.serial.stop_work()
       self.serial.close()
+      self.state_interactor.stop_work() 
+
 
 def main():
    import sys

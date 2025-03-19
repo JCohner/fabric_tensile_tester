@@ -38,5 +38,5 @@ class SerialInterface(Worker):
         if val == b'\r':
           mess = ''.join(char_buff)
           char_buff = []
-          # print(f"message read as {mess}")
           self.message_queue.put(mess)
+          # print(f"{self.message_queue.qsize()}") # good debug for making sure we are conusming all inbound messages
