@@ -69,14 +69,19 @@ class StateInteractor(Worker):
       time.sleep(0.01) # prevent fighting on the queue
       if (not self.message_queue.empty()):
         message = self.message_queue.get()
-        dm = {sub[0] : float(sub[1]) for sub in (el.split(":") for el in message.split(","))} # cursed
-        state_update = State(home_state=HomeState(dm['hs']),
-                             preload_state=PreloadState(dm['ps']),
-                             test_state=TestState(dm['ts']),
-                             command=CommandIn(dm['c']),
-                             status=Status(dm['s']),
-                             current_target=dm['ct'],
-                             current_position=dm['cp'],
-                             current_load=dm['cl'])
-        self.state_update_queue.put(state_update)
-        # print(self.state_update_queue.qsize())
+        try:
+          dm = {sub[0] : float(sub[1]) for sub in (el.split(":") for el in message.split(","))} # cursed
+          state_update = State(home_state=HomeState(dm['hs']),
+                               preload_state=PreloadState(dm['ps']),
+                               test_state=TestState(dm['ts']),
+                               command=CommandIn(dm['c']),
+                               status=Status(dm['s']),
+                               current_target=dm['ct'],
+                               current_position=dm['cp'],
+                               current_load=dm['cl'])
+          self.state_update_queue.put(state_update)
+          # print(self.state_update_queue.qsize())
+        except:
+          print(f"MALFORMED MESSAGE, MISREAD: {message}")
+          continue
+
