@@ -13,7 +13,10 @@ class SerialInterface(Worker):
     self.ser = serial.Serial()
     self.is_connected = Value(c_bool, False)
 
+    # out queue
     self.message_queue = Queue()
+    # in queue
+    self.command_queue = Queue()
 
 
   def open(self, port: str):
@@ -40,3 +43,8 @@ class SerialInterface(Worker):
           char_buff = []
           self.message_queue.put(mess)
           # print(f"{self.message_queue.qsize()}") # good debug for making sure we are conusming all inbound messages
+
+        if (not self.command_queue.empty()):
+          command = self.command_queue.get()
+          print(f"writing command: {command.value.encode()}")
+          self.ser.write(command.value.encode())

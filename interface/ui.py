@@ -5,7 +5,7 @@ from threading import Thread
 
 from worker import Worker
 from serial_interface import SerialInterface
-from state_interactor import StateInteractor
+from state_interactor import StateInteractor, HomeState, PreloadState, TestState, CommandIn, CommandOut
 
 class StretchEmUI(QMainWindow, Worker):
    def __init__(self):
@@ -55,14 +55,23 @@ class StretchEmUI(QMainWindow, Worker):
    def attempt_home(self):
       if (not self.serial.is_connected.value):
          print("Not connected to serial, not sending command")
+         return
+      self.serial.command_queue.put(CommandOut.HOME)
+
 
    def work_thread(self):
       while(self.is_working.value):
          if (not self.state_interactor.state_update_queue.empty()):
             val = self.state_interactor.state_update_queue.get()
             print(val)
+            # plumb up state to UI elements
+            # if (val.home_state == HomeState.NOT_HOMED):
+            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: red")
+            # elif (val.home_state == HomeState.HOMING):
+            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: orange")
+            # elif (val.home_state == HomeState.HOMED):
+            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: green")
 
-            # we have val!! we can now interact with it graphically inshallah
 
    def __del__(self):
       print("closing shit")

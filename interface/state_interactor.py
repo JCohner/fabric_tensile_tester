@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, StrEnum, IntEnum
 from queue import Queue
 import time
 
@@ -23,12 +23,20 @@ class TestState(Enum):
   TEST_COMPLETED = 2
 
 # must be kept inline with stretcher/robot_commands.h
-class Command(Enum):
+class CommandIn(IntEnum):
   NONE = 0
-  HOME = 1
-  PRELOAD = 2
-  TEST = 3
-  CLEAR_QUEUE = 4
+  HOME = 1,
+  PRELOAD = 2,
+  TEST = 3,
+  CLEAR_QUEUE = 4,
+
+
+class CommandOut(StrEnum):
+  HOME = "home\r",
+  PRELOAD = "pre\r",
+  TEST = "test\r",
+  CLEAR_QUEUE = "q\r",
+
 
 # must be kept inline with stretcher/status.h
 class Status(Enum):
@@ -42,7 +50,7 @@ class State():
   home_state: HomeState = HomeState.NOT_HOMED
   preload_state: PreloadState = PreloadState.NOT_PRELOADING
   test_state: TestState = TestState.NOT_TESTING
-  command: Command = Command.NONE
+  command: CommandIn = CommandIn.NONE
   status: Status = Status.NONE
   current_target: float = 0
   current_position: float = 0
@@ -55,6 +63,7 @@ class StateInteractor(Worker):
     self.message_queue = serial_message_queue
     self.state_update_queue = Queue()
 
+  # Work thread consuming serial port ouput and synthesizing state messages
   def work_thread(self):
     while(self.is_working.value):
       time.sleep(0.01) # prevent fighting on the queue
@@ -64,10 +73,10 @@ class StateInteractor(Worker):
         state_update = State(home_state=HomeState(dm['hs']),
                              preload_state=PreloadState(dm['ps']),
                              test_state=TestState(dm['ts']),
-                             command=Command(dm['c']),
+                             command=CommandIn(dm['c']),
                              status=Status(dm['s']),
                              current_target=dm['ct'],
                              current_position=dm['cp'],
                              current_load=dm['cl'])
         self.state_update_queue.put(state_update)
-        print(self.state_update_queue.qsize())
+        # print(self.state_update_queue.qsize())
