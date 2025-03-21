@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(835, 600)
         MainWindow.setStyleSheet("QPushButton#pushButton_4 {\n"
 "    background-color: red;\n"
 "    border-width: 2px;\n"
@@ -32,19 +32,6 @@ class Ui_MainWindow(object):
         self.testButton = QtWidgets.QPushButton(parent=self.controlGroupBox)
         self.testButton.setGeometry(QtCore.QRect(10, 150, 87, 26))
         self.testButton.setObjectName("testButton")
-        self.isHomedColorIndicator = QtWidgets.QGraphicsView(parent=self.controlGroupBox)
-        self.isHomedColorIndicator.setGeometry(QtCore.QRect(260, 40, 31, 31))
-        self.isHomedColorIndicator.setAutoFillBackground(True)
-        self.isHomedColorIndicator.setStyleSheet("QGraphicsView#isHomedColorIndicator {\n"
-"    background-color: red;\n"
-"}")
-        brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
-        brush.setStyle(QtCore.Qt.BrushStyle.NoBrush)
-        self.isHomedColorIndicator.setBackgroundBrush(brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
-        brush.setStyle(QtCore.Qt.BrushStyle.NoBrush)
-        self.isHomedColorIndicator.setForegroundBrush(brush)
-        self.isHomedColorIndicator.setObjectName("isHomedColorIndicator")
         self.isHomedLabel = QtWidgets.QLabel(parent=self.controlGroupBox)
         self.isHomedLabel.setGeometry(QtCore.QRect(180, 50, 66, 18))
         self.isHomedLabel.setObjectName("isHomedLabel")
@@ -72,6 +59,13 @@ class Ui_MainWindow(object):
         self.currentLoadValueLabel = QtWidgets.QLabel(parent=self.controlGroupBox)
         self.currentLoadValueLabel.setGeometry(QtCore.QRect(190, 230, 66, 18))
         self.currentLoadValueLabel.setObjectName("currentLoadValueLabel")
+        self.isHomedIndicatorLabel = QtWidgets.QLabel(parent=self.controlGroupBox)
+        self.isHomedIndicatorLabel.setGeometry(QtCore.QRect(250, 50, 66, 18))
+        self.isHomedIndicatorLabel.setStyleSheet("QLabel#isHomedIndicatorLabel{\n"
+" background-color: red;\n"
+"}")
+        self.isHomedIndicatorLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.isHomedIndicatorLabel.setObjectName("isHomedIndicatorLabel")
         self.serialConnectionGroupBox = QtWidgets.QGroupBox(parent=self.centralwidget)
         self.serialConnectionGroupBox.setGeometry(QtCore.QRect(20, 370, 351, 151))
         self.serialConnectionGroupBox.setObjectName("serialConnectionGroupBox")
@@ -105,7 +99,7 @@ class Ui_MainWindow(object):
         self.loadCellCalibrationGroupBox.setObjectName("loadCellCalibrationGroupBox")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 835, 23))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
@@ -129,6 +123,7 @@ class Ui_MainWindow(object):
         self.currentPosValueLabel.setText(_translate("MainWindow", "NA"))
         self.currentLoadLabel.setText(_translate("MainWindow", "Current Load(no unit):"))
         self.currentLoadValueLabel.setText(_translate("MainWindow", "NA"))
+        self.isHomedIndicatorLabel.setText(_translate("MainWindow", "No"))
         self.serialConnectionGroupBox.setTitle(_translate("MainWindow", "Serial Connection"))
         self.connectSerialButton.setText(_translate("MainWindow", "Connect"))
         self.isSerialConnectedLabel.setText(_translate("MainWindow", "Is Conneted?"))

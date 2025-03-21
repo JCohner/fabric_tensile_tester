@@ -64,13 +64,19 @@ class StretchEmUI(QMainWindow, Worker):
          if (not self.state_interactor.state_update_queue.empty()):
             val = self.state_interactor.state_update_queue.get()
             print(val)
-            # plumb up state to UI elements
-            # if (val.home_state == HomeState.NOT_HOMED):
-            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: red")
-            # elif (val.home_state == HomeState.HOMING):
-            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: orange")
-            # elif (val.home_state == HomeState.HOMED):
-            #    self.ui.isHomedColorIndicator.setStyleSheet("background-color: green")
+            #plumb up state to UI elements
+            try: 
+               if (val.home_state == HomeState.NOT_HOMED):
+                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: red")
+                  self.ui.isHomedIndicatorLabel.setText("NAUR")
+               elif (val.home_state == HomeState.HOMING):
+                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: orange")
+                  self.ui.isHomedIndicatorLabel.setText("HOMING")
+               elif (val.home_state == HomeState.HOMED):
+                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: green")
+                  self.ui.isHomedIndicatorLabel.setText("FUCK YES")
+            except Exception as error:
+               print(error)
 
 
    def __del__(self):
@@ -86,7 +92,6 @@ def main():
    MainWindow = StretchEmUI()
 
    MainWindow.show()
-   print("GOT HERE")
    sys.exit(app.exec())
 
 
