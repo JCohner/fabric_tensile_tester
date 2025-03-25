@@ -1,7 +1,8 @@
+import time
+
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from qt_app_schema import Ui_MainWindow
 
-from threading import Thread
 
 from worker import Worker
 from serial_interface import SerialInterface
@@ -61,6 +62,7 @@ class StretchEmUI(QMainWindow, Worker):
 
    def work_thread(self):
       while(self.is_working.value):
+         time.sleep(0.01) # seems to prevent deadlock when accessing state_update queue, thanks GIL
          if (not self.state_interactor.state_update_queue.empty()):
             val = self.state_interactor.state_update_queue.get()
             print(val)
