@@ -65,18 +65,19 @@ class StretchEmUI(QMainWindow, Worker):
             val = self.state_interactor.state_update_queue.get()
             print(val)
             #plumb up state to UI elements
-            try: 
-               if (val.home_state == HomeState.NOT_HOMED):
-                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: red")
-                  self.ui.isHomedIndicatorLabel.setText("NAUR")
-               elif (val.home_state == HomeState.HOMING):
-                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: orange")
-                  self.ui.isHomedIndicatorLabel.setText("HOMING")
-               elif (val.home_state == HomeState.HOMED):
-                  self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: green")
-                  self.ui.isHomedIndicatorLabel.setText("FUCK YES")
-            except Exception as error:
-               print(error)
+            if (val.home_state == HomeState.NOT_HOMED):
+               self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: red")
+               self.ui.isHomedIndicatorLabel.setText("NAUR")
+            elif (val.home_state == HomeState.HOMING):
+               self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: orange")
+               self.ui.isHomedIndicatorLabel.setText("HOMING")
+            elif (val.home_state == HomeState.HOMED):
+               self.ui.isHomedIndicatorLabel.setStyleSheet("background-color: green")
+               self.ui.isHomedIndicatorLabel.setText("FUCK YES")
+
+            # current position
+            self.ui.currentPosValueLabel.setText(f"{val.current_position}")
+            self.ui.currentLoadValueLabel.setText(f"{val.current_load}")
 
 
    def __del__(self):
