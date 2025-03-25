@@ -27,13 +27,15 @@ void Rail::setup(){
 }
 
 void Rail::tick(){
+  static int print_slow = 0;
+
   // if our current goal isn't running
   if (current_goal_.status.get() != Status::RUNNING){
     // try grab new command
     if (!job_queue_.empty()){
       current_goal_ = job_queue_.front();
-      Serial1.print("Got new rail goal of: ");
-      Serial1.println(current_goal_.position);
+      // Serial1.print("Got new rail goal of: ");
+      // Serial1.println(current_goal_.position);
       job_queue_.pop();
     } else {
       return;
@@ -48,23 +50,31 @@ void Rail::tick(){
   // if this is first pass
   if (current_goal_.status.check_edge(Status::NONE)){
     double dist_mm = current_goal_.position - rail_position_;
-    Serial1.print("Moving rail: ");
-    Serial1.println(dist_mm);
+    
+    // debug print
+    if (print_slow % 100 == 0){
+      Serial1.print("Moving rail: "); 
+      Serial1.println(dist_mm);
+    }
+
     int steps = std::floor(dist_mm * step_per_mm);
     current_goal_.steps_to_move = abs(steps);
     current_goal_.direction = std::signbit(steps);
-    Serial1.print("Commanding this many steps: ");
-    Serial1.println(current_goal_.steps_to_move);
+    // Serial1.print("Commanding this many steps: ");
+    // Serial1.println(current_goal_.steps_to_move);
   
     // enable stepper
     stepper.enable();
     delayMicroseconds(100); // needed delay for stepper to enable before getting commands
   }
 
-  // Serial1.print("At this many steps: ");
-  // Serial1.println(current_goal_.steps_moved);
-  // Serial1.print("Out of: ");
-  // Serial1.println(current_goal_.steps_to_move);
+  // if (print_slow % 10 == 0){
+    // Serial1.print("At this many steps: ");
+    // Serial1.println(current_goal_.steps_moved);
+    // Serial1.print("Out of: ");
+    // Serial1.println(current_goal_.steps_to_move);
+  // }
+
   bool err = false;
   if (current_goal_.steps_moved < current_goal_.steps_to_move){
     current_goal_.steps_moved++;
@@ -79,9 +89,13 @@ void Rail::tick(){
     is_moving_ = false;
     stepper.disable();
   }
-  // char buff[50] = {0};
-  // sprintf(buff, "Current rail pos: %.2f\r", rail_position_);
-  // Serial1.print(buff);
+
+  if (print_slow++ % 100 == 0){
+    char pos_p_buff[50] = {0};
+    sprintf(pos_p_buff, "Current rail pos: %.2f\r\n", rail_position_);
+    Serial1.print(pos_p_buff);
+  }
+
   if (!err && is_moving_){
     Serial1.println("ERROR!!");
     current_goal_.status.set(Status::FAILURE);

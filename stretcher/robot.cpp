@@ -87,9 +87,12 @@ void Robot::tick_preload(){
       }
     break;
     case PreloadState::PRE_LOAD_MOVING_TO_VALUE:
-      char buff[100] = {0};
-      sprintf(buff, "Load Cell: %06.1f\t Current pos: %.2f vs Goal Pos %.2f\r", load_cell_.get_value(),rail_.get_position(),state_.target_position_.get());
-      Serial1.print(buff);
+      static unsigned int slow_roll = 0; 
+      if (slow_roll++ % 25 == 0){
+        char buff[100] = {0};
+        sprintf(buff, "Load Cell: %06.1f\t Current pos: %.2f vs Goal Pos %.2f\r\n", load_cell_.get_value(),rail_.get_position(),state_.target_position_.get());
+        Serial1.print(buff);
+      }
       if (rail_.job_complete()){
         Serial1.print("\n");
         Serial1.println("Preload move done");
