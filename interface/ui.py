@@ -65,7 +65,8 @@ class StretchEmUI(QMainWindow, Worker):
          print("Not connected to serial, not sending command")
          return
       self.serial.command_queue.put(CommandOut.PRELOAD.value.encode())
-      self.serial.command_queue.put(self.ui.preloadDistanceLineEdit.text().encode())
+      time.sleep(.1)
+      self.serial.command_queue.put((self.ui.preloadDistanceLineEdit.text() + '\r').encode())
 
 
    def work_thread(self):

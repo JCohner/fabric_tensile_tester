@@ -42,7 +42,7 @@ class SerialInterface(Worker):
           mess = ''.join(char_buff)
           char_buff = []
           self.message_queue.put(mess)
-          # print(f"{self.message_queue.qsize()}") # good debug for making sure we are conusming all inbound messages
+          # print(f"{self.ser.in_waiting}") # good debug for making sure we are conusming all inbound messages
 
         if (not self.command_queue.empty()):
           command = self.command_queue.get()

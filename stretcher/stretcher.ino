@@ -42,7 +42,7 @@ int ii = 0;
 char termination_char = '\r';
 
 void loop() {
-  delay(10);
+  delay(100);
   // if command available write
   if (Serial.available() > 0){
     auto incoming_byte = Serial.read();
