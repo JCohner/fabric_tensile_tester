@@ -46,5 +46,5 @@ class SerialInterface(Worker):
 
         if (not self.command_queue.empty()):
           command = self.command_queue.get()
-          print(f"writing command: {command.value.encode()}")
-          self.ser.write(command.value.encode())
+          print(f"writing value: {command}")
+          self.ser.write(command)

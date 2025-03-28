@@ -34,6 +34,7 @@ class StretchEmUI(QMainWindow, Worker):
       self.ui.disconnectSerialButton.clicked.connect(self.attempt_serial_disconnect)
       # Control buttons
       self.ui.homeButton.clicked.connect(self.attempt_home)
+      self.ui.preloadButton.clicked.connect(self.attempt_preload)
 
    def attempt_serial_connect(self):
       if (self.ui.serialPortLineEdit.isModified()):
@@ -57,12 +58,19 @@ class StretchEmUI(QMainWindow, Worker):
       if (not self.serial.is_connected.value):
          print("Not connected to serial, not sending command")
          return
-      self.serial.command_queue.put(CommandOut.HOME)
+      self.serial.command_queue.put(CommandOut.HOME.value.encode())
+
+   def attempt_preload(self):
+      if (not self.serial.is_connected.value):
+         print("Not connected to serial, not sending command")
+         return
+      self.serial.command_queue.put(CommandOut.PRELOAD.value.encode())
+      self.serial.command_queue.put(self.ui.preloadDistanceLineEdit.text().encode())
 
 
    def work_thread(self):
       while(self.is_working.value):
-         time.sleep(0.01) # seems to prevent deadlock when accessing state_update queue, thanks GIL
+         time.sleep(0.05) # seems to prevent deadlock when accessing state_update queue, thanks GIL
          if (not self.state_interactor.state_update_queue.empty()):
             val = self.state_interactor.state_update_queue.get()
             print(val)
